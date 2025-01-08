@@ -26,7 +26,7 @@ app.use(
 );
 
 app.use(
-  cors({ origin: "https://vox-debate.vercel.app", credentials: true })
+  cors({ origin: ["https://vox-debate.vercel.app"], credentials: true })
 );
 
 // Configurations for different types of data acceptance
