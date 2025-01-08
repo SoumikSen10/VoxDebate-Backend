@@ -26,6 +26,12 @@ app.use(
   })
 );
 
+app.use(cors({
+  origin: 'https://vox-debate.vercel.app/',
+  credentials: true,
+}));
+
+
 // Configurations for different types of data acceptance
 app.use(express.json());
 app.use(express.urlencoded({ extended: true, limit: "20kb" }));
