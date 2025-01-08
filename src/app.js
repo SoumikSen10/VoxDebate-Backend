@@ -6,31 +6,28 @@ import debateRouter from "./routes/service.routes.js";
 
 const app = express();
 
-// Fetch allowed origins from environment variable
 const allowedOrigins = process.env.CORS_ORIGIN.split(",");
 
 app.use(
   cors({
-    origin: (origin, callback) => {
-      const allowedOrigins = process.env.CORS_ORIGIN.split(",");
-      // Allow all origins if '*' is specified
-      if (!origin || allowedOrigins.includes("*") || allowedOrigins.includes(origin)) {
-        callback(null, true);
+    origin: function (origin, callback) {
+      if (!origin) return callback(null, true); // Allow requests with no origin, like mobile apps or curl requests
+      if (
+        allowedOrigins.indexOf("*") !== -1 ||
+        allowedOrigins.indexOf(origin) !== -1
+      ) {
+        return callback(null, true);
       } else {
-        callback(new Error("Not allowed by CORS"));
+        return callback(new Error("Not allowed by CORS"));
       }
     },
-    credentials: true, // Allow credentials (cookies)
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], // Allow specific HTTP methods
-    allowedHeaders: ["Content-Type", "Authorization"], // Specify allowed headers
+    credentials: true,
   })
 );
 
-app.use(cors({
-  origin: 'https://vox-debate.vercel.app/',
-  credentials: true,
-}));
-
+app.use(
+  cors({ origin: "https://vox-debate.vercel.app", credentials: true })
+);
 
 // Configurations for different types of data acceptance
 app.use(express.json());
